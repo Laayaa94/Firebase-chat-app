@@ -11,9 +11,12 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100vh;
+  color: white;
 }
 .ChatContainer{
   width: 90vw;
   height: 90vh;
-  background-color: rebeccapurple;
+  border-radius: 15px;
+  background-color: rgba(17,25,40,0.75);
 }
