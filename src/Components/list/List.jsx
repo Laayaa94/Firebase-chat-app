@@ -1,10 +1,13 @@
 import React from 'react'
 import './List.css'
+import UserInfo from './UserInfo/UserInfo'
+import Chatlist from './ChatList/Chatlist'
 
 const List = () => {
   return (
     <div className='list'>
-      <h1>list</h1>
+      <UserInfo/>
+      <Chatlist/>
     </div>
   )
 }
