@@ -17,6 +17,7 @@ body{
 .ChatContainer{
   width: 90vw;
   height: 90vh;
+  display: flex;
   border-radius: 15px;
   backdrop-filter: blur(19px) saturate(180%);
   background-color: rgba(17,25,40,0.75);

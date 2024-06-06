@@ -1,9 +1,9 @@
 import React from 'react'
-import '/Detail.css'
+import './Detail.css'
 const Detail = () => {
   return (
-    <div>
-      
+    <div className='detail'>
+      <h1>detail</h1>
     </div>
   )
 }
