@@ -1,11 +1,45 @@
 .ChatList {
     flex: 1;
-    overflow-y: scroll; /* Only enable vertical scrolling */
-    scrollbar-width: thin; /* For Firefox, reduce scrollbar width */
-    scrollbar-color: rgba(17,25,40,0.5) transparent; /* For Firefox, set scrollbar colors */
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
+.chatlistsAll {
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin; /* For Firefox, reduce scrollbar width */
+    scrollbar-color: transparent transparent; /* For Firefox, hide scrollbar */
+
+    /* Custom scrollbar for Webkit browsers */
+    &::-webkit-scrollbar {
+        width: 8px; /* Adjust scrollbar width */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent; /* Track background */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent; /* Thumb background color */
+        border-radius: 20px;
+        border: 3px solid transparent; /* Space around the thumb */
+        background-clip: content-box; /* Ensures the border doesn't overlap the thumb */
+    }
+
+    &:hover {
+        scrollbar-color: rgba(17, 25, 40, 0.3) transparent; /* For Firefox */
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(17, 25, 40, 0.3); /* Thumb color on hover */
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent; /* Track background on hover */
+        }
+    }
+}
 
 .search {
     display: flex;
@@ -52,8 +86,8 @@
     align-items: center;
     gap: 20px;
     cursor: pointer;
-    padding: 20px;
-    border-bottom: 1px solid#dddddd35;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dddddd35;
 }
 
 .item img {

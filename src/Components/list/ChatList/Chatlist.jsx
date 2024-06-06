@@ -17,6 +17,8 @@ const Chatlist = () => {
         <img src={ addMode ? minus : plus} alt="" className='add'  onClick={()=>setAddmode((prev)=>!prev)} />
       </div>
 
+      <div className="chatlistsAll">
+        
       <div className="item">
         <img src={avatar} alt="" />
         <div className="texts">
@@ -46,6 +48,34 @@ const Chatlist = () => {
           <p>Hello</p>
         </div>
       </div>
+      <div className="item">
+        <img src={avatar} alt="" />
+        <div className="texts">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="item">
+        <img src={avatar} alt="" />
+        <div className="texts">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="item">
+        <img src={avatar} alt="" />
+        <div className="texts">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="item">
+        <img src={avatar} alt="" />
+        <div className="texts">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
 
       <div className="item">
         <img src={avatar} alt="" />
@@ -53,6 +83,7 @@ const Chatlist = () => {
           <span>Jane Doe</span>
           <p>Hello</p>
         </div>
+      </div>
       </div>
     </div>
   )

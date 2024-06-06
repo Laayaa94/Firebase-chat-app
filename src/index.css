@@ -23,19 +23,3 @@ body{
   background-color: rgba(17,25,40,0.75);
   border: 1px solid rgba(255,255,255,0.125);
 }
-.ChatList::-webkit-scrollbar {
-  width: 0; /* Hide scrollbar */
-}
-
-.ChatList:hover::-webkit-scrollbar {
-  width: 8px; /* Show scrollbar on hover */
-}
-
-.ChatList::-webkit-scrollbar-track {
-  background: transparent; /* Track color */
-}
-
-.ChatList::-webkit-scrollbar-thumb {
-  background-color: rgba(17,25,40,0.5); /* Scrollbar thumb color */
-  border-radius: 10px;
-}
