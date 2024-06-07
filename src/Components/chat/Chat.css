@@ -79,10 +79,10 @@
     }
 
     &:hover {
-        scrollbar-color: rgba(17, 25, 40, 0.3) transparent; /* Firefox */
+        scrollbar-color: rgba(17, 25, 40, 0.999) transparent; /* Firefox */
 
         &::-webkit-scrollbar-thumb {
-            background-color: rgba(17, 25, 40, 0.3); /* Show thumb on hover */
+            background-color: rgba(17, 25, 40, 0.999); /* Show thumb on hover */
         }
 
         &::-webkit-scrollbar-track {
@@ -129,7 +129,7 @@
             p {
                 color: white;
                 padding: 20px;
-                background-color: rgba(17, 25, 40, 0.3);
+                background-color: rgba(17, 25, 40, 0.999);
                 border-radius: 10px;
             }
 

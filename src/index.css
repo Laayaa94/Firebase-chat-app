@@ -7,7 +7,7 @@
 }
 
 body{
-  background-image: url("./Assets/bg.jpg");
+  background:linear-gradient(rgba(17,25,40,0.3),rgba(17,25,40,0.75)), url("./Assets/editChatBg.jpg");
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,6 +20,6 @@ body{
   display: flex;
   border-radius: 15px;
   backdrop-filter: blur(19px) saturate(180%);
-  background-color: rgba(17,25,40,0.75);
+  background-color: rgba(17, 25, 40, 0.066);
   border: 1px solid rgba(255,255,255,0.125);
 }
