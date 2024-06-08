@@ -4,14 +4,17 @@ import more from '../../../Assets/more.png'
 import video from '../../../Assets/video.png'
 import edit from '../../../Assets/edit.png'
 import avatar from '../../../Assets/avatar.png'
+import { useUserStore } from '../../../lib/userStore'
 
 
 const UserInfo = () => {
+  const { currentUser } = useUserStore();
+
   return (
     <div className='UserInfo'>
       <div className="user">
-        <img src={avatar} alt="" />
-        <h2>Jane Doe</h2>
+        <img src={currentUser.avatar || avatar} alt="" />
+        <h2>{currentUser.username}</h2>
       </div>
       <div className="icons">
         <img src={more} alt="" />
