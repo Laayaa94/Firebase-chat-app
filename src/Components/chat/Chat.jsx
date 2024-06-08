@@ -9,14 +9,16 @@ import phone from '../../Assets/phone.png'
 import video from '../../Assets/video.png'
 import info from '../../Assets/info.png'
 import avatar from '../../Assets/avatar.png'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
 import { useChatStore } from '../../lib/chatStore'
+import { useUserStore } from '../../lib/userStore'
 const Chat = () => {
   const[open,setOpen]=useState(false);
   const[chat,setChat]=useState();
   const[text,setText]=useState("");
-  const {chatId}=useChatStore();
+const {currentUser}=useUserStore();
+  const {chatId,user}=useChatStore();
   const endRef =useRef(null);
 
   useEffect(()=>{
@@ -36,7 +38,44 @@ const Chat = () => {
     setText((prev)=>prev + e.emoji);
     setOpen(false)
   };
-  console.log(text)
+  const handleSend= async()=>{
+    if(text==="") return;
+    try{
+
+      await updateDoc(doc(db,"chats",chatId),{
+        messages:arrayUnion({
+          senderId:currentUser.id,
+          text,
+          createdAt:new Date(),
+        }),
+      });
+      const userIDs=[currentUser.id,user.id];
+
+      userIDs.forEach(async(id) =>{
+
+        const userChatRef=doc(db,"userchats",id)
+      const userChatsSnapshot=await getDoc(userChatRef)
+
+      if(userChatsSnapshot.exists()){
+        const userChatsData=userChatsSnapshot.data()
+        const chatIndex=userChatsData.chats.findIndex(c=>c.chatId=== chatId)
+
+        userChatsData.chats[chatIndex].lastMessage=text;
+        userChatsData.chats[chatIndex].isSeen = 
+        id ===currentUser.id?true:false;
+        userChatsData.chats[chatIndex].updatedAt=Date.now();
+
+        await updateDoc(userChatRef,{
+          chats:userChatsData.chats,
+        });
+      }
+      });
+     
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   return (
     <div className='chat'>
       <div className="top">
@@ -54,21 +93,25 @@ const Chat = () => {
        </div>
       </div>
       <div className="center">
-       
 
-        <div className="message own">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpvPZ-aGzXrY-bq6pdEP6GB1_WpD0vmD-2PA&s" alt="" />
+       {  
+
+       chat?.messages?.map((message)=>(
+       <div className="message own" key={message.createAt}>
+         { message.img && <
+          img src={message.img}
+          alt="" />}
           <div className="texts">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing.</p>
-            <span>1 min ago</span>
+            <p>{message.text}</p>
+            /*span tag*/
           </div>
         </div>
 
-       
+      ))}
         <div ref={endRef}></div>
       </div>
       
-      //bottom part
+     
       <div className="bottom">
       <div className="icons">
         <img src={img} alt="" />
@@ -83,7 +126,7 @@ const Chat = () => {
 
           </div>
         </div>
-        <button className='sendbtn'>Send</button>
+        <button className='sendbtn' onClick={handleSend}>Send</button>
       </div>
     </div>
   )
