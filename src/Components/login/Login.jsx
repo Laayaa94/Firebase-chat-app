@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import './Login.css';
 import avatarImg from '../../Assets/avatar.png';
 import { toast } from 'react-toastify';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
-
+import { createUserWithEmailAndPassword ,signInWithEmailAndPassword} from 'firebase/auth';
+import { auth,db } from '../../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import upload from '../../lib/upload';
 const Login = () => {
     const [avatar, setAvatar] = useState({
         file: null,
         url: ""
     });
 
+    const [loading,setLoading]= useState(false)
     const handleAvatar = e => {
         if (e.target.files[0]) {
             setAvatar({
@@ -24,13 +26,29 @@ const Login = () => {
         document.getElementById('file').click();
     };
 
-    const handleLogin = e => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Handle login logic here
+    
+        setLoading(true);
+    
+        const formData = new FormData(e.target);
+        const email = formData.get("email");
+        const password = formData.get("password");
+    
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (err) {
+            console.log(err);
+            toast.error(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
+    
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setLoading(true)
 
         const formData = new FormData(e.target);
         const username = formData.get("username");
@@ -39,16 +57,26 @@ const Login = () => {
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
-
-            await setDoc(doc(db, "cities", "LA"), {
-                name: "Los Angeles",
-                state: "CA",
-                country: "USA"
+            
+            const imgUrl=await upload(avatar.file)
+            await setDoc(doc(db, "users", "res.user.uid"), {
+                username,
+                email,
+                avatar:imgUrl,
+                id:res.user.uid,
+                blocked:[],
               });
               
+              await setDoc(doc(db, "userchats", "res.user.uid"), {
+               chats:[],
+              });
+              
+              toast.success("Succuesfully Account Created, Login Now")
         } catch (err) {
             console.log(err);
             toast.error(err.message);
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -59,7 +87,7 @@ const Login = () => {
                 <form onSubmit={handleLogin}>
                     <input type="text" placeholder='Email' name='email' />
                     <input type="password" placeholder='Password' name='password' />
-                    <button type="submit">Sign In</button>
+                    <button disabled={loading}>{loading?"Loading": "Sign Ip"}</button>
                 </form>
             </div>
 
@@ -76,11 +104,11 @@ const Login = () => {
                     <input type="text" placeholder='User Name' name='username' />
                     <input type="email" placeholder='Email' name='email' />
                     <input type="password" placeholder='Password' name='password' />
-                    <button type="submit">Sign Up</button>
+                    <button  disabled={loading}>{loading?"Loading": "Sign Up"}</button>
                 </form>
             </div>
         </div>
-    );
-};
+    )
 
+}
 export default Login;
