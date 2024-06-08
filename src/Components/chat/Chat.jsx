@@ -9,13 +9,27 @@ import phone from '../../Assets/phone.png'
 import video from '../../Assets/video.png'
 import info from '../../Assets/info.png'
 import avatar from '../../Assets/avatar.png'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { db } from '../../lib/firebase'
 const Chat = () => {
   const[open,setOpen]=useState(false);
+  const[chat,setChat]=useState();
   const[text,setText]=useState("");
   const endRef =useRef(null);
   useEffect(()=>{
     endRef.current?.scrollIntoView({behavior:"smooth"})
   },[])
+
+  useEffect(()=>{
+    const unSub=onSnapshot(doc(db,"chats","0F0vTHIQQaKffJpUJ3CU"),(res)=>{
+      setChat(res.data())
+    })
+    return()=>{
+      unSub();
+    }
+  },[])
+
+  console.log(chat)
   const handleEmoji = e=>{
     setText((prev)=>prev + e.emoji);
     setOpen(false)
