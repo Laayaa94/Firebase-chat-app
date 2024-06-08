@@ -1,31 +1,39 @@
 import { create } from 'zustand';
 import { db } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { useUserStore } from './userStore';
 
-export const useUserStore = create((set) => ({
-  currentUser: null,
-  isLoading: true,
-  fetchUserInfo: async (uid) => {
-    if (!uid) {
-      console.log("No UID provided, setting currentUser to null");
-      return set({ currentUser: null, isLoading: false });
+export const useChatStore = create((set) => ({
+    chatId: null,
+    user:null,
+    isCurrrentUserBlocked:false,
+    isReceiverBlocked:false,
+    
+    changeChat:(chatId,user)=>{
+        const currentUser=useUserStore.getState().currentUser
+
+        //Check current user is blocked
+        if(user.blocked.includes(currentUser.id)){
+           return set({
+            chatId,
+            user:null,
+            isCurrrentUserBlocked:true,
+            isReceiverBlocked:false,
+           }) ;
+        }
+        //Check receiver is blocked
+
+        if(currentUser.blocked.includes(user.id)){
+            return set({
+             chatId,
+             user:user,
+             isCurrrentUserBlocked:false,
+             isReceiverBlocked:true,
+            }) ;
+         }
+        changeBlock:()=>{
+            set(state=>({...state,isReceiverBlocked:!state.isReceiverBlocked}))
+        }
     }
-
-    try {
-      console.log(`Fetching user info for UID: ${uid}`);
-      const docRef = doc(db, "users", uid); // Corrected this line
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("User document exists:", docSnap.data());
-        set({ currentUser: docSnap.data(), isLoading: false });
-      } else {
-        console.log("No such document!");
-        set({ currentUser: null, isLoading: false });
-      }
-    } catch (err) {
-      console.log("Error fetching user info:", err);
-      set({ currentUser: null, isLoading: false });
-    }
-  }
-}));
+  
+  }  ));
