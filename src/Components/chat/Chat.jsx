@@ -11,25 +11,27 @@ import info from '../../Assets/info.png'
 import avatar from '../../Assets/avatar.png'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
+import { useChatStore } from '../../lib/chatStore'
 const Chat = () => {
   const[open,setOpen]=useState(false);
   const[chat,setChat]=useState();
   const[text,setText]=useState("");
+  const {chatId}=useChatStore();
   const endRef =useRef(null);
+
   useEffect(()=>{
     endRef.current?.scrollIntoView({behavior:"smooth"})
   },[])
 
   useEffect(()=>{
-    const unSub=onSnapshot(doc(db,"chats","0F0vTHIQQaKffJpUJ3CU"),(res)=>{
+    const unSub=onSnapshot(doc(db,"chats",chatId),(res)=>{
       setChat(res.data())
     })
     return()=>{
       unSub();
     }
-  },[])
+  },[chatId])
 
-  console.log(chat)
   const handleEmoji = e=>{
     setText((prev)=>prev + e.emoji);
     setOpen(false)
@@ -52,29 +54,7 @@ const Chat = () => {
        </div>
       </div>
       <div className="center">
-        <div className="message">
-          <img src={avatar} alt="" />
-          <div className="texts">
-            <p>Lorem, ipsum dolor.</p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
-        <div className="message own">
-         
-          <div className="texts">
-            <p>Lorem, ipsum dolor.</p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
-        <div className="message">
-          <img src={avatar} alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, tempore?</p>
-            <span>1 min ago</span>
-          </div>
-        </div>
+       
 
         <div className="message own">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpvPZ-aGzXrY-bq6pdEP6GB1_WpD0vmD-2PA&s" alt="" />
@@ -84,15 +64,11 @@ const Chat = () => {
           </div>
         </div>
 
-        <div className="message">
-          <img src={avatar} alt="" />
-          <div className="texts">
-            <p>Lorem, ipsum dolor.</p>
-            <span>1 min ago</span>
-          </div>
-        </div>
+       
         <div ref={endRef}></div>
       </div>
+      
+      //bottom part
       <div className="bottom">
       <div className="icons">
         <img src={img} alt="" />
