@@ -15,16 +15,20 @@ function App() {
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
       if (user) {
+        console.log("User is logged in:", user);
         fetchUserInfo(user.uid);
-      } 
+      } else {
+        console.log("No user is logged in");
+        fetchUserInfo(null);
+      }
     });
-    
+
     return () => {
       unSub();
     };
   }, [fetchUserInfo]);
 
-  console.log(currentUser);
+  console.log("Current User:", currentUser);
 
   if (isLoading) return <div className='loading'>Loading...</div>;
 

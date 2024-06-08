@@ -4,6 +4,7 @@ import avatar from '../../Assets/avatar.png'
 import arrowUp from '../../Assets/arrowUp.png'
 import arrowDown from '../../Assets/arrowDown.png'
 import download from '../../Assets/download.png'
+import { auth } from '../../lib/firebase'
 
 
 const Detail = () => {
@@ -67,7 +68,7 @@ const Detail = () => {
             </div>
           </div>
       <button>Block User</button>
-      <button className='logout'>Logout</button>
+      <button className='logout' onClick={()=>auth.signOut()}>Logout</button>
         </div>
     </div>
   )

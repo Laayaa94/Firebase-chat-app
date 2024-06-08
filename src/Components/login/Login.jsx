@@ -7,6 +7,7 @@ import { auth,db } from '../../lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import upload from '../../lib/upload';
 const Login = () => {
+    
     const [avatar, setAvatar] = useState({
         file: null,
         url: ""
@@ -37,9 +38,14 @@ const Login = () => {
     
         try {
             await signInWithEmailAndPassword(auth, email, password);
+        toast.success("Login successful!")
+        
         } catch (err) {
-            console.log(err);
-            toast.error(err.message);
+            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+                toast.error("Invalid email or password. Please try again.");
+            } else {
+                toast.error("An error occurred. Please try again later.");
+            }
         } finally {
             setLoading(false);
         }
@@ -59,7 +65,7 @@ const Login = () => {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             
             const imgUrl=await upload(avatar.file)
-            await setDoc(doc(db, "users", "res.user.uid"), {
+            await setDoc(doc(db, "users", res.user.uid), {
                 username,
                 email,
                 avatar:imgUrl,
@@ -67,7 +73,7 @@ const Login = () => {
                 blocked:[],
               });
               
-              await setDoc(doc(db, "userchats", "res.user.uid"), {
+              await setDoc(doc(db, "userchats", res.user.uid), {
                chats:[],
               });
               
@@ -87,7 +93,7 @@ const Login = () => {
                 <form onSubmit={handleLogin}>
                     <input type="text" placeholder='Email' name='email' />
                     <input type="password" placeholder='Password' name='password' />
-                    <button disabled={loading}>{loading?"Loading": "Sign Ip"}</button>
+                    <button disabled={loading}>{loading?"Loading": "Sign In"}</button>
                 </form>
             </div>
 
