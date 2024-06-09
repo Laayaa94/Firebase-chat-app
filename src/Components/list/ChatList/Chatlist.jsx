@@ -18,7 +18,6 @@ const Chatlist = () => {
   const { changeChat } = useChatStore();
 
   useEffect(() => {
-    // Ensure currentUser exists before attempting to access its properties
     if (!currentUser?.id) {
       console.error("Current user is not defined");
       return;
@@ -89,9 +88,9 @@ const Chatlist = () => {
             }}
           >
             <img 
-              src={chat.user.avatar || avatar} // Use user's avatar or default to avatar.png
+              src={chat.user.blocked.includes(currentUser.id) ? avatar : chat.user.avatar || avatar} 
               alt="User Avatar" 
-              onError={(e) => { e.target.src = avatar }} // Fallback to default avatar on error
+              onError={(e) => { e.target.src = avatar }} 
             />
             <div className="texts">
               <span>{chat.user.blocked.includes(currentUser.id) ? "user" : chat.user.username}</span>

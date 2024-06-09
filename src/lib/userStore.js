@@ -13,7 +13,7 @@ export const useUserStore = create((set) => ({
 
     try {
       console.log(`Fetching user info for UID: ${uid}`);
-      const docRef = doc(db, "users", uid); // Corrected this line
+      const docRef = doc(db, "users", uid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {

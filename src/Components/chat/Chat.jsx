@@ -58,13 +58,14 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if (text === "") return;
+    if (text === "" || isCurrentUserBlocked || isReceiverBlocked) return;
+  
     let imgUrl = null;
     try {
       if (img.file) {
         imgUrl = await upload(img.file);
       }
-
+  
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
@@ -73,29 +74,29 @@ const Chat = () => {
           ...(imgUrl && { img: imgUrl }),
         }),
       });
-
+  
       const userIDs = [currentUser.id, user.id];
-
+  
       userIDs.forEach(async (id) => {
         const userChatRef = doc(db, "userchats", id);
         const userChatsSnapshot = await getDoc(userChatRef);
-
+  
         if (userChatsSnapshot.exists()) {
           const userChatsData = userChatsSnapshot.data();
           const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
-
+  
           if (chatIndex !== -1) {
             userChatsData.chats[chatIndex].lastMessage = text;
             userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
             userChatsData.chats[chatIndex].updatedAt = Date.now();
-
+  
             await updateDoc(userChatRef, {
               chats: userChatsData.chats,
             });
           }
         }
       });
-
+  
     } catch (err) {
       console.log(err);
     }
@@ -105,6 +106,11 @@ const Chat = () => {
     })
     setText("");
   };
+  
+
+  // Add console logs here to check the values of isCurrentUserBlocked and isReceiverBlocked
+  console.log("isCurrentUserBlocked:", isCurrentUserBlocked);
+  console.log("isReceiverBlocked:", isReceiverBlocked);
 
   return (
     <div className='chat'>
@@ -125,8 +131,9 @@ const Chat = () => {
       <div className="center">
         {chat?.messages?.map((message, index) => (
           <div className={`message ${message.senderId === currentUser.id ? 'own' : ''}`} key={index}>
-            {message.img && <img src={message.img} alt="" />}
             <div className="texts">
+            {message.img && <img src={message.img} alt="" />}
+
               <p>{message.text}</p>
               <span>{new Date(message.createdAt.seconds * 1000).toLocaleTimeString()}</span>
             </div>
@@ -160,21 +167,22 @@ const Chat = () => {
           {open && <EmojiPicker onEmojiClick={handleEmoji} />}
         </div>
         </div>
-        <input
-          type="text"
-          placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "You cannot send a message" : "Type your message..."}
-          onChange={e => setText(e.target.value)}
-          value={text}
-          disabled={isCurrentUserBlocked || isReceiverBlocked}
-        />
-        <img src={microphone} alt="" />
-        <button
-          className='sendbtn'
-          onClick={handleSend}
-          disabled={isCurrentUserBlocked || isReceiverBlocked}
-        >
-          Send
-        </button>
+          <input
+    type="text"
+    placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "You cannot send a message" : "Type your message..."}
+    onChange={e => setText(e.target.value)}
+    value={text}
+    disabled={isCurrentUserBlocked || isReceiverBlocked}
+  />
+
+  <button
+    className='sendbtn'
+    onClick={handleSend}
+    disabled={isCurrentUserBlocked || isReceiverBlocked}
+  >
+    Send
+  </button>
+
       </div>
     </div>
   )
