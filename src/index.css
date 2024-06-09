@@ -11,8 +11,12 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   color: white;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
 }
 .ChatContainer{
   width: 90vw;
@@ -29,4 +33,13 @@ body{
   font-size: 36px;
   border-radius: 10px;
   background-color: rgba(17,25,40,0..9);
+}
+
+@media(max-width:870px){
+  .ChatContainer{
+    width:95vw;
+    height: 95vh;
+    border-radius: 0;
+   
+  }
 }

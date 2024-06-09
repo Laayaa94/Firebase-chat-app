@@ -3,3 +3,8 @@
     display: flex;
     flex-direction: column;
 }
+@media(max-width:1000px){
+    .list{
+        flex: 2;
+    }
+}

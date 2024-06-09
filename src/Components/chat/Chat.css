@@ -5,6 +5,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    max-width: 90%;
+    margin: auto;
 
     .top {
         padding: 20px;
@@ -191,11 +193,61 @@
 
     .emogi {
         position: relative;
+       
+    }
+    
+    .emogi .picker {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+       
+    }}
+@media(max-width:1000px){
+    .chat{
+        flex: 3;
+        max-width: 100%; /* Ensure chat takes up full width */
+        
+        .top{
+           
+            
+            .user{
+                img{
+                    width: 50px; /* Reduce user avatar size */
+                    height: 50px;
+                }
+            }
+        }
 
-        .picker {
-            position: absolute;
-            bottom: 50px;
-            left: 0;
+        .icons{
+            img{
+                width: 15px; /* Reduce icon size */
+                height: 15px;
+            }
+        }
+
+        .center{
+            .message {
+                max-width: 90%; /* Reduce message width */
+             
+                img{
+                    width: 20px; /* Reduce image size */
+                    height: 20px;
+                }
+            }
+        }
+
+        .bottom{
+            padding: 10px; /* Reduce padding */
+            gap: 0;
+            input{
+                font-size: 14px; /* Reduce input font size */
+            }
+          
+            .sendbtn{
+                margin-left: 2px;
+                padding: 8px 16px; /* Reduce button padding */
+                font-size: 14px; /* Reduce button font size */
+            }
         }
     }
 }

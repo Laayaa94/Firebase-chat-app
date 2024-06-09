@@ -155,7 +155,10 @@ const Chat = () => {
             onChange={handleImg}
           />
           <img src={camera} alt="" />
-          <img src={microphone} alt="" />
+          <div className="emoji">
+          <img src={emoji} alt="" onClick={() => setOpen(prev => !prev)} />
+          {open && <EmojiPicker onEmojiClick={handleEmoji} />}
+        </div>
         </div>
         <input
           type="text"
@@ -164,10 +167,7 @@ const Chat = () => {
           value={text}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
-        <div className="emoji">
-          <img src={emoji} alt="" onClick={() => setOpen(prev => !prev)} />
-          {open && <EmojiPicker onEmojiClick={handleEmoji} />}
-        </div>
+        <img src={microphone} alt="" />
         <button
           className='sendbtn'
           onClick={handleSend}
